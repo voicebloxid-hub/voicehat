@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cek Status Pesanan | VoiceBlox.id</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1f1c2c, #928dab);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #ffcc00;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #ffcc00;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      padding: 30px;
+      width: 100%;
+      max-width: 450px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      margin-top: 10px;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      font-size: 16px;
+    }
+
+    input::placeholder {
+      color: #ccc;
+    }
+
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background: #ffcc00;
+      color: #000;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #fff;
+    }
+
+    .result {
+      margin-top: 25px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      display: none;
+      color: #fff;
+    }
+
+    .error {
+      color: #ff6b6b;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .status {
+      padding: 6px 12px;
+      border-radius: 8px;
+      display: inline-block;
+      font-weight: bold;
+    }
+
+    .status.Selesai {
+      background-color: #00ff88;
+      color: #000;
+    }
+
+    .status.Diproses {
+      background-color: #ffcc00;
+      color: #000;
+    }
+
+    .status.Gagal {
+      background-color: #ff3b3b;
+      color: #fff;
+    }
+
+    a.home {
+      display: inline-block;
+      margin-top: 20px;
+      color: #ffcc00;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    a.home:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Cek Status Pesanan</h1>
+    <input type="text" id="idPesanan" placeholder="Masukkan ID Pesanan kamu...">
+    <button onclick="cekStatus()">Cek Sekarang</button>
+    <div id="result" class="result"></div>
+    <p id="error" class="error"></p>
+    <a href="index.html" class="home">⬅ Kembali ke Beranda</a>
+  </div>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbz1k51QO4UXJoi-olooJuRWjJR3fV_d3RTKqW1n2hZ4KD_GXzzaT-N_Kd0lnB_JH0vR/exec"; // ganti dengan URL Web App kamu
+
+    async function cekStatus() {
+      const id = document.getElementById("idPesanan").value.trim();
+      const resultBox = document.getElementById("result");
+      const errorBox = document.getElementById("error");
+
+      if (!id) {
+        errorBox.textContent = "Masukkan ID pesanan terlebih dahulu.";
+        resultBox.style.display = "none";
+        return;
+      }
+
+      errorBox.textContent = "Memeriksa data...";
+      resultBox.style.display = "none";
+
+      try {
+        const response = await fetch(`${scriptURL}?id=${encodeURIComponent(id)}`);
+        const data = await response.json();
+
+        if (data.error) {
+          errorBox.textContent = data.error;
+          resultBox.style.display = "none";
+          return;
+        }
+
+        errorBox.textContent = "";
+
+        resultBox.innerHTML = `
+          <h3>🔎 Detail Pesanan</h3>
+          <p><strong>ID:</strong> ${data.id}</p>
+          <p><strong>Jenis:</strong> ${data.jenis}</p>
+          <p><strong>Nama:</strong> ${data.nama}</p>
+          <p><strong>Tanggal:</strong> ${new Date(data.tanggal).toLocaleString()}</p>
+          <p><strong>Status:</strong> <span class="status ${data.status}">${data.status}</span></p>
+        `;
+        resultBox.style.display = "block";
+      } catch (err) {
+        errorBox.textContent = "Terjadi kesalahan saat mengambil data.";
+        resultBox.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>

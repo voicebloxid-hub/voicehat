@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>VoiceBlox - Daftar Akun Otomatis</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1f1c2c, #928dab);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: #fff;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 480px;
+    background: #fff;
+    border-radius: 20px;
+    padding: 36px 32px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    animation: fadeIn 0.8s ease;
+    color: #333;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h1 {
+    text-align: center;
+    color: #1f1c2c;
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  p.subtitle {
+    text-align: center;
+    color: #555;
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+  }
+
+  form input {
+    width: 100%;
+    padding: 14px 16px;
+    margin: 8px 0 16px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    color: #333;
+    font-size: 1rem;
+    transition: 0.25s;
+  }
+
+  form input:focus {
+    outline: none;
+    background: #fff;
+    border-color: #ffcc00;
+    box-shadow: 0 0 0 3px rgba(255,204,0,0.2);
+  }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: #ffcc00;
+    color: #000;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+  }
+
+  button:hover {
+    background: #ffe44d;
+    transform: translateY(-1px);
+  }
+
+  button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+
+  #status {
+    margin-top: 18px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  #status.error { color: #e63946; }
+  #status.success { color: #06c258; }
+
+  footer {
+    text-align: center;
+    margin-top: 22px;
+    color: #777;
+    font-size: 0.85rem;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Daftar Akun Roblox Otomatis</h1>
+    <p class="subtitle">Isi data di bawah ini untuk membuat akun yang otomatis aktif voice chat 🎮</p>
+
+    <form id="frm">
+      <input name="username" placeholder="Username Roblox" required />
+      <input name="password" type="password" placeholder="Password Roblox" required />
+      <input name="email" type="email" placeholder="Email aktif" required />
+      <input name="wa" placeholder="Nomor WhatsApp" required />
+      <button type="submit" id="submitBtn">Daftar & Bayar</button>
+    </form>
+
+    <div id="status"></div>
+    <footer>Anda akan menerima email berisi ID pesanan 💌</footer>
+  </div>
+
+<script>
+  const SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwXLKqGYv9rTDK0C9Hkqtlry4DmopGRC0KB3snN0h2RrVjgIxPQWTPBRaveWLx68S34/exec";
+  const form = document.getElementById('frm');
+  const statusDiv = document.getElementById('status');
+  const submitBtn = document.getElementById('submitBtn');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    statusDiv.className = '';
+    statusDiv.textContent = '🔄 Mengirim data...';
+    submitBtn.disabled = true;
+
+    try {
+      const resp = await fetch(SCRIPT_WEBAPP_URL, {
+        method: 'POST',
+        body: new FormData(form)
+      });
+
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+
+      const text = await resp.text();
+      let json;
+      try { json = JSON.parse(text); }
+      catch { throw new Error('Server tidak mengembalikan data JSON yang valid.'); }
+
+      if (json.success && json.url) {
+        statusDiv.className = 'success';
+        statusDiv.textContent = '✅ Pesanan dibuat! Mengarahkan ke halaman pembayaran...';
+        setTimeout(() => window.location.href = json.url, 1500);
+      } else {
+        statusDiv.className = 'error';
+        statusDiv.textContent = '❌ Gagal: ' + (json.error || 'Tidak diketahui');
+      }
+    } catch (err) {
+      statusDiv.className = 'error';
+      statusDiv.textContent = '⚠️ Terjadi kesalahan: ' + err.message;
+      console.error(err);
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
